@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productividad Pro - Windows 11</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Desktop Icons -->
+    <div class="desktop">
+        <div class="desktop-icon" data-app="projects">
+            <i class="fas fa-folder"></i>
+            <span>Proyectos</span>
+        </div>
+        <div class="desktop-icon" data-app="calendar">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Calendario</span>
+        </div>
+        <div class="desktop-icon" data-app="pomodoro">
+            <i class="fas fa-clock"></i>
+            <span>Pomodoro</span>
+        </div>
+        <div class="desktop-icon" data-app="music">
+            <i class="fas fa-music"></i>
+            <span>Música</span>
+        </div>
+        <div class="desktop-icon" data-app="weather">
+            <i class="fas fa-cloud-sun"></i>
+            <span>Tiempo</span>
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="start-button">
+            <i class="fab fa-windows"></i>
+        </div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Buscar en Productividad Pro..." id="search-input">
+        </div>
+        <div class="taskbar-icons">
+            <!-- Taskbar icons will be added dynamically when windows are opened -->
+        </div>
+        <div class="time-widget">
+            <div id="current-time">12:00 PM</div>
+            <div id="current-date">Lun 1 Ene</div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="search-results" id="search-results">
+        <!-- Search results will be populated dynamically -->
+    </div>
+
+    <!-- Calendar Tooltip -->
+    <div class="calendar-tooltip" id="calendar-tooltip">
+        <div class="tooltip-title" id="tooltip-date">1 de Enero</div>
+        <div id="tooltip-tasks">
+            <!-- Tasks will be populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Windows will be created dynamically -->
+
+    <!-- Modals -->
+    <div class="modal" id="project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="project-modal-title">Nuevo Proyecto</div>
+                <div class="close-modal">&times;</div>
+            </div>
+            <div class="form-group">
+                <label for="project-name">Nombre</label>
+                <input type="text" id="project-name">
+            </div>
+            <div class="form-group">
+                <label for="project-description">Descripción</label>
+                <textarea id="project-description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="project-start">Fecha Inicio</label>
+                <input type="date" id="project-start">
+            </div>
+            <div class="form-group">
+                <label for="project-end">Fecha Fin</label>
+                <input type="date" id="project-end">
+            </div>
+            <div class="form-group">
+                <label>Color</label>
+                <div class="color-wheel">
+                    <div class="color-preview" id="color-preview"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="task-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="task-modal-title">Nueva Tarea</div>
+                <div class="close-modal">&times;</div>
+            </div>
+            <div class="form-group">
+                <label for="task-name">Nombre</label>
+                <input type="text" id="task-name">
+            </div>
+            <div class="form-group">
+                <label for="task-description">Descripción</label>
+                <textarea id="task-description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="task-start">Fecha Inicio</label>
+                <input type="date" id="task-start">
+            </div>
+            <div class="form-group">
+                <label for="task-end">Fecha Fin</label>
+                <input type="date" id="task-end">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="subtask-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="subtask-modal-title">Nueva Subtarea</div>
+                <div class="close-modal">&times;</div>
+            </div>
+            <div class="form-group">
+                <label for="subtask-name">Nombre</label>
+                <input type="text" id="subtask-name">
+            </div>
+            <div class="form-group">
+                <label for="subtask-description">Descripción</label>
+                <textarea id="subtask-description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="subtask-start">Fecha Inicio</label>
+                <input type="date" id="subtask-start">
+            </div>
+            <div class="form-group">
+                <label for="subtask-end">Fecha Fin</label>
+                <input type="date" id="subtask-end">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="pomodoro-settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Configuración Pomodoro</div>
+                <div class="close-modal">&times;</div>
+            </div>
+            <div class="form-group">
+                <label for="focus-hours">Horas de enfoque</label>
+                <input type="number" id="focus-hours" min="0" max="23" value="0">
+            </div>
+            <div class="form-group">
+                <label for="focus-minutes">Minutos de enfoque</label>
+                <input type="number" id="focus-minutes" min="0" max="59" value="25">
+            </div>
+            <div class="form-group">
+                <label for="break-hours">Horas de descanso</label>
+                <input type="number" id="break-hours" min="0" max="23" value="0">
+            </div>
+            <div class="form-group">
+                <label for="break-minutes">Minutos de descanso</label>
+                <input type="number" id="break-minutes" min="0" max="59" value="5">
+            </div>
+            <div class="form-group">
+                <label for="target-hours">Horas objetivo</label>
+                <input type="number" id="target-hours" min="0" max="23" value="1">
+            </div>
+            <div class="form-group">
+                <label for="target-minutes">Minutos objetivo</label>
+                <input type="number" id="target-minutes" min="0" max="59" value="0">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/windowManager.js"></script>
+    <script src="js/projectManager.js"></script>
+    <script src="js/calendarManager.js"></script>
+    <script src="js/pomodoroManager.js"></script>
+    <script src="js/musicManager.js"></script>
+    <script src="js/searchManager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

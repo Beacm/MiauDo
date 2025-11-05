@@ -1,0 +1,769 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: var(--primary-gradient);
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Desktop */
+.desktop {
+    height: calc(100vh - 50px);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    grid-auto-rows: 90px;
+    gap: 20px;
+    position: relative;
+}
+
+.desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 90px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+    padding: 5px;
+    text-align: center;
+}
+
+.desktop-icon:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.desktop-icon i {
+    font-size: 32px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.desktop-icon span {
+    font-size: 12px;
+    color: #333;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Taskbar */
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: var(--taskbar-color);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 1000;
+}
+
+.start-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-right: 10px;
+}
+
+.start-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.search-bar {
+    flex: 1;
+    max-width: 400px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    margin-right: 10px;
+}
+
+.search-bar i {
+    margin-right: 8px;
+    color: #666;
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    outline: none;
+    font-size: 14px;
+}
+
+.taskbar-icons {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+}
+
+.taskbar-icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-right: 5px;
+}
+
+.taskbar-icon:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.taskbar-icon.active {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.time-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 12px;
+    padding: 0 10px;
+    margin-left: auto;
+}
+
+/* Windows */
+.window {
+    position: absolute;
+    background: var(--window-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    min-width: 400px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - 50px) !important;
+}
+
+.window-header {
+    height: 35px;
+    background: var(--window-header);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    cursor: move;
+}
+
+.window-title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.window-controls {
+    display: flex;
+}
+
+.window-control {
+    width: 30px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+
+.window-control:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.window-content {
+    flex: 1;
+    padding: 15px;
+    overflow: auto;
+}
+
+/* Projects Window */
+.projects-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.project-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #8a7cea;
+}
+
+.project-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.project-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.project-name {
+    font-weight: 600;
+    flex: 1;
+}
+
+.project-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.project-action {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.project-action:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.task-item, .subtask-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.task-checkbox, .subtask-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 3px;
+    margin-right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-checkbox.checked, .subtask-checkbox.checked {
+    background: #8a7cea;
+    border-color: #8a7cea;
+    color: white;
+}
+
+.task-name, .subtask-name {
+    flex: 1;
+}
+
+.task-actions, .subtask-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.task-action, .subtask-action {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.task-action:hover, .subtask-action:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.add-button {
+    background: #8a7cea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.add-button:hover {
+    background: #7a6cd8;
+}
+
+/* Pomodoro Window */
+.pomodoro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.timer-display {
+    font-size: 72px;
+    font-weight: 300;
+    margin: 20px 0;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.timer-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.start-btn {
+    background: #68d391;
+    color: white;
+}
+
+.pause-btn {
+    background: #f6ad55;
+    color: white;
+}
+
+.reset-btn {
+    background: #fc8181;
+    color: white;
+}
+
+.progress-container {
+    width: 100%;
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #68d391;
+    width: 0%;
+    transition: width 1s linear;
+}
+
+.pomodoro-stats {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Calendar Window */
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.calendar-nav-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #f0f0f0;
+}
+
+.calendar-nav-btn:hover {
+    background: #e0e0e0;
+}
+
+.calendar-title {
+    font-weight: 600;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    flex: 1;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-weight: 600;
+    padding: 5px;
+    color: #666;
+}
+
+.calendar-day {
+    background: white;
+    border-radius: 5px;
+    padding: 8px;
+    min-height: 80px;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+}
+
+.calendar-day:hover {
+    background: #f5f5f5;
+}
+
+.calendar-day.today {
+    background: #e6fffa;
+    border: 1px solid #68d391;
+}
+
+.day-number {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.day-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.day-task {
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Calendar Tooltip */
+.calendar-tooltip {
+    position: absolute;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    z-index: 100;
+    min-width: 200px;
+    max-width: 300px;
+    display: none;
+    pointer-events: none;
+}
+
+.tooltip-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.tooltip-task {
+    font-size: 12px;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+}
+
+.tooltip-task:hover {
+    background: #f5f5f5;
+}
+
+/* Music Window */
+.music-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 20px;
+}
+
+.album-art {
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8a7cea, #7aece4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 48px;
+}
+
+.song-info {
+    text-align: center;
+}
+
+.song-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.song-artist {
+    font-size: 14px;
+    color: #666;
+}
+
+.music-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.control-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #8a7cea;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.control-btn:hover {
+    background: #7a6cd8;
+}
+
+.play-btn {
+    width: 50px;
+    height: 50px;
+}
+
+/* Weather Window */
+.weather-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 15px;
+}
+
+.weather-icon {
+    font-size: 64px;
+    color: #7aece4;
+}
+
+.temperature {
+    font-size: 48px;
+    font-weight: 300;
+}
+
+.weather-condition {
+    font-size: 18px;
+    color: #666;
+}
+
+.location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Search Results */
+.search-results {
+    position: absolute;
+    bottom: 55px;
+    left: 60px;
+    width: 400px;
+    background: var(--window-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1001;
+}
+
+.search-result-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-result-item:hover {
+    background: #f5f5f5;
+}
+
+.search-result-item i {
+    color: #8a7cea;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    display: none;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: var(--shadow);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.close-modal {
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: #8a7cea;
+    color: white;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #333;
+}
+
+/* Color Wheel */
+.color-wheel {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+    margin: 10px auto;
+    position: relative;
+    cursor: pointer;
+}
+
+.color-preview {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 2px solid #333;
+}

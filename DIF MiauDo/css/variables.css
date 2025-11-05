@@ -1,0 +1,9 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    --taskbar-color: rgba(255, 255, 255, 0.8);
+    --window-bg: rgba(255, 255, 255, 0.9);
+    --window-header: rgba(240, 240, 240, 0.9);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --pastel-colors: #8a7cea, #7aece4, #7ae7a3, #f6e05e, #f6ad55, #fc8181, #a78bfa, #68d391, #4fd1c5, #63b3ed;
+}
