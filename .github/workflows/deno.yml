@@ -10,9 +10,9 @@ name: Deno
 
 on:
   push:
-    branches: ["main"]
+    branches: [DIF MiauDo/index.html]
   pull_request:
-    branches: ["main"]
+    branches: [DIF MiauDo/index.html]
 
 permissions:
   contents: read
