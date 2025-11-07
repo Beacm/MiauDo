@@ -42,7 +42,7 @@ function updateTime() {
     const now = new Date();
     const timeString = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     const dateString = now.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
-    
+
     document.getElementById('current-time').textContent = timeString;
     document.getElementById('current-date').textContent = dateString;
 }
@@ -78,6 +78,7 @@ function makeDraggable(element) {
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
+        bringToFront(element.id);
     }
     
     function elementDrag(e) {
@@ -87,8 +88,20 @@ function makeDraggable(element) {
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        element.style.top = (element.offsetTop - pos2) + "px";
-        element.style.left = (element.offsetLeft - pos1) + "px";
+        
+        // Calcular nueva posición
+        let newTop = element.offsetTop - pos2;
+        let newLeft = element.offsetLeft - pos1;
+        
+        // Limitar movimiento dentro de la ventana
+        const maxLeft = window.innerWidth - element.offsetWidth - 10;
+        const maxTop = window.innerHeight - element.offsetHeight - 60; // Considerando taskbar
+        
+        newTop = Math.max(10, Math.min(newTop, maxTop));
+        newLeft = Math.max(10, Math.min(newLeft, maxLeft));
+        
+        element.style.top = newTop + "px";
+        element.style.left = newLeft + "px";
     }
     
     function closeDragElement() {
@@ -119,8 +132,63 @@ function getWindowIcon(type) {
     return icons[type] || 'fas fa-window-restore';
 }
 
+function generateUniquePastelColor() {
+    const pastelColors = [
+        '#8a7cea', '#7aece4', '#7ae7a3', '#f6e05e', '#f6ad55', 
+        '#fc8181', '#a78bfa', '#68d391', '#4fd1c5', '#63b3ed',
+        '#f687b3', '#90cdf4', '#fbb6ce', '#b794f4', '#81e6d9',
+        '#fbd38d', '#fc8181', '#9ae6b4', '#faf089', '#fbb6ce'
+    ];
+    
+    // Si ya hay proyectos, evitar colores repetidos
+    const usedColors = state.projects.map(p => p.color);
+    const availableColors = pastelColors.filter(color => !usedColors.includes(color));
+    
+    if (availableColors.length > 0) {
+        return availableColors[Math.floor(Math.random() * availableColors.length)];
+    }
+    
+    // Si todos los colores están usados, generar uno aleatorio pastel
+    const hue = Math.floor(Math.random() * 360);
+    return `hsl(${hue}, 70%, 80%)`;
+}
+function hslToHex(h, s, l) {
+    h /= 360;
+    s /= 100;
+    l /= 100;
+    
+    let r, g, b;
+    
+    if (s === 0) {
+        r = g = b = l;
+    } else {
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+        
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+    
+    const toHex = x => {
+        const hex = Math.round(x * 255).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    };
+    
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
 function getWindowContent(type) {
-    switch(type) {
+    switch (type) {
         case 'projects':
             return `
                 <div class="projects-container" id="projects-container">
