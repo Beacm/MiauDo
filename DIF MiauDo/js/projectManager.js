@@ -1,104 +1,36 @@
 // Project Management
-
-function loadSampleData() {
-    const sampleProject = {
-        id: state.nextProjectId++,
-        nombre: "Proyecto de Ejemplo",
-        descripción: "Este es un proyecto de ejemplo para demostrar las funcionalidades",
-        color: "#8a7cea",
-        fecha_inicio: "2023-01-01",
-        fecha_fin: "2023-12-31",
-        tareas: [
-            {
-                id: state.nextTaskId++,
-                nombre: "Tarea de ejemplo",
-                descripción: "Esta es una tarea de ejemplo",
-                fecha_inicio: "2023-01-01",
-                fecha_fin: "2023-01-15",
-                completada: false,
-                subtareas: [
-                    {
-                        id: state.nextSubtaskId++,
-                        nombre: "Subtarea de ejemplo",
-                        descripción: "Esta es una subtarea de ejemplo",
-                        fecha_inicio: "2023-01-01",
-                        fecha_fin: "2023-01-05",
-                        completada: false
-                    }
-                ]
-            }
-        ]
-    };
-    
-    state.projects.push(sampleProject);
-    
-    if (document.getElementById('projects-list')) {
-        renderProjects();
-    }
-}
-
 function renderProjects() {
     const projectsList = document.getElementById('projects-list');
     if (!projectsList) return;
     
     projectsList.innerHTML = '';
     
+    //check if there are no projects
     if (state.projects.length === 0) {
         projectsList.innerHTML = '<p>No hay proyectos. ¡Crea uno nuevo!</p>';
         return;
     }
     
+    createProjectsListDisplay(projectsList);
+    addProjectEventListeners();
+    highlightProjectAndTask();
+}
+
+function createProjectsListDisplay(projectsList) {
     state.projects.forEach(project => {
         const projectElement = document.createElement('div');
         projectElement.className = 'project-card';
         projectElement.style.borderLeftColor = project.color;
         projectElement.id = `project-${project.id}`;
-        
-        let tasksHTML = '';
-        project.tareas.forEach(task => {
-            let subtasksHTML = '';
-            task.subtareas.forEach(subtask => {
-                subtasksHTML += `
-                    <div class="subtask-item" id="subtask-${project.id}-${task.id}-${subtask.id}">
-                        <div class="subtask-checkbox ${subtask.completada ? 'checked' : ''}">
-                            ${subtask.completada ? '<i class="fas fa-check"></i>' : ''}
-                        </div>
-                        <div class="subtask-name">${subtask.nombre}</div>
-                        <div class="subtask-actions">
-                            <div class="subtask-action" data-project="${project.id}" data-task="${task.id}" data-subtask="${subtask.id}">
-                                <i class="fas fa-edit"></i>
-                            </div>
-                            <div class="subtask-action" data-project="${project.id}" data-task="${task.id}" data-subtask="${subtask.id}">
-                                <i class="fas fa-trash"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            tasksHTML += `
-                <div class="task-item" id="task-${project.id}-${task.id}">
-                    <div class="task-checkbox ${task.completada ? 'checked' : ''}">
-                        ${task.completada ? '<i class="fas fa-check"></i>' : ''}
-                    </div>
-                    <div class="task-name">${task.nombre}</div>
-                    <div class="task-actions">
-                        <div class="task-action" data-project="${project.id}" data-task="${task.id}">
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <div class="task-action" data-project="${project.id}" data-task="${task.id}">
-                            <i class="fas fa-edit"></i>
-                        </div>
-                        <div class="task-action" data-project="${project.id}" data-task="${task.id}">
-                            <i class="fas fa-trash"></i>
-                        </div>
-                    </div>
-                </div>
-                ${subtasksHTML}
-            `;
-        });
-        
-        projectElement.innerHTML = `
+        createTasksListDisplay(project, projectElement);
+        loadProjectActionButtons(projectElement, project);
+
+        projectsList.appendChild(projectElement);
+    });
+}
+
+function loadProjectActionButtons(projectElement, project) {
+    projectElement.innerHTML = `
             <div class="project-header">
                 <div class="project-color" style="background: ${project.color}"></div>
                 <div class="project-name">${project.nombre}</div>
@@ -120,13 +52,62 @@ function renderProjects() {
                 ${tasksHTML}
             </div>
         `;
-        
-        projectsList.appendChild(projectElement);
+}
+
+function createTasksListDisplay(project) {
+    let tasksHTML = '';
+    project.tareas.forEach(task => {
+        let subtasksHTML = createSubtasksListDisplay(task, project);
+
+        tasksHTML = loadTaskActionButtons(tasksHTML, project, task, subtasksHTML);
     });
-    
-    // Add event listeners
-    addProjectEventListeners();
-    highlightProjectAndTask();
+}
+
+function loadTaskActionButtons(tasksHTML, project, task, subtasksHTML) {
+    tasksHTML += `
+                <div class="task-item" id="task-${project.id}-${task.id}">
+                    <div class="task-checkbox ${task.completada ? 'checked' : ''}">
+                        ${task.completada ? '<i class="fas fa-check"></i>' : ''}
+                    </div>
+                    <div class="task-name">${task.nombre}</div>
+                    <div class="task-actions">
+                        <div class="task-action" data-project="${project.id}" data-task="${task.id}">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="task-action" data-project="${project.id}" data-task="${task.id}">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="task-action" data-project="${project.id}" data-task="${task.id}">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+                ${subtasksHTML}
+            `;
+    return tasksHTML;
+}
+
+function createSubtasksListDisplay(task, project) {
+    let subtasksHTML = '';
+    task.subtareas.forEach(subtask => {
+        subtasksHTML += `
+                    <div class="subtask-item" id="subtask-${project.id}-${task.id}-${subtask.id}">
+                        <div class="subtask-checkbox ${subtask.completada ? 'checked' : ''}">
+                            ${subtask.completada ? '<i class="fas fa-check"></i>' : ''}
+                        </div>
+                        <div class="subtask-name">${subtask.nombre}</div>
+                        <div class="subtask-actions">
+                            <div class="subtask-action" data-project="${project.id}" data-task="${task.id}" data-subtask="${subtask.id}">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="subtask-action" data-project="${project.id}" data-task="${task.id}" data-subtask="${subtask.id}">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+    });
+    return subtasksHTML;
 }
 
 function addProjectEventListeners() {
@@ -580,3 +561,41 @@ function filterProjects() {
     // Implementation would filter projects based on the selected filter
     renderProjects();
 }
+
+function loadSampleData() {
+    const sampleProject = {
+        id: state.nextProjectId++,
+        nombre: "Proyecto de Ejemplo",
+        descripción: "Este es un proyecto de ejemplo para demostrar las funcionalidades",
+        color: "#8a7cea",
+        fecha_inicio: "2023-01-01",
+        fecha_fin: "2023-12-31",
+        tareas: [
+            {
+                id: state.nextTaskId++,
+                nombre: "Tarea de ejemplo",
+                descripción: "Esta es una tarea de ejemplo",
+                fecha_inicio: "2023-01-01",
+                fecha_fin: "2023-01-15",
+                completada: false,
+                subtareas: [
+                    {
+                        id: state.nextSubtaskId++,
+                        nombre: "Subtarea de ejemplo",
+                        descripción: "Esta es una subtarea de ejemplo",
+                        fecha_inicio: "2023-01-01",
+                        fecha_fin: "2023-01-05",
+                        completada: false
+                    }
+                ]
+            }
+        ]
+    };
+    
+    state.projects.push(sampleProject);
+    
+    if (document.getElementById('projects-list')) {
+        renderProjects();
+    }
+}
+
