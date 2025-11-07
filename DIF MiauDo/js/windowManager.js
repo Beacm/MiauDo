@@ -1,5 +1,7 @@
 // Window Management
 
+// Window Management
+
 function openWindow(type) {
     const existingWindow = state.windows.find(w => w.type === type);
     if (existingWindow) {
@@ -14,10 +16,33 @@ function openWindow(type) {
     const windowElement = document.createElement('div');
     windowElement.className = 'window';
     windowElement.id = windowId;
-    windowElement.style.top = '50px';
-    windowElement.style.left = '50px';
-    windowElement.style.width = '800px';
-    windowElement.style.height = '600px';
+    
+    // Calcular posición centrada y dentro de los límites
+    const windowWidth = 800;
+    const windowHeight = 600;
+    const maxLeft = window.innerWidth - windowWidth - 20;
+    const maxTop = window.innerHeight - windowHeight - 70; // Considerando la taskbar
+    
+    let left = 50;
+    let top = 50;
+    
+    // Si hay otras ventanas, colocar en posición escalonada
+    const windowCount = state.windows.length;
+    if (windowCount > 0) {
+        left = 50 + (windowCount * 30);
+        top = 50 + (windowCount * 30);
+    }
+    
+    // Asegurar que no se salga de los límites
+    left = Math.min(left, maxLeft);
+    top = Math.min(top, maxTop);
+    left = Math.max(20, left);
+    top = Math.max(20, top);
+    
+    windowElement.style.top = top + 'px';
+    windowElement.style.left = left + 'px';
+    windowElement.style.width = windowWidth + 'px';
+    windowElement.style.height = windowHeight + 'px';
     windowElement.style.zIndex = getNextZIndex();
     
     windowElement.innerHTML = `
@@ -49,7 +74,9 @@ function openWindow(type) {
         icon: windowIcon,
         minimized: false,
         maximized: false,
-        element: windowElement
+        element: windowElement,
+        originalPosition: { left: left, top: top },
+        originalSize: { width: windowWidth, height: windowHeight }
     };
     
     state.windows.push(windowObj);
